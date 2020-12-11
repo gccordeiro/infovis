@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="./winereviews.js"></script>
+</head>
+
+<body>  
+  <div id="vis"></div>
+  
+  <script>
+    var spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+      "title": "Wine Reviews",
+      "data": { "values": winereviews },
+      "transform": [{
+        "filter": { "and": [
+          { "field": "price", "valid": true },
+          { "field": "points", "valid": true }
+        ]}}, 
+        { "sample": 500 }],
+      "mark": { "type": "rect", "tooltip": true },
+      "width": 1080,
+      "height": 360,
+      "encoding": {
+        "x": { "field": "variety", "type": "nominal" },
+        "y": { "field": "country", "type": "nominal" },
+        "color": { "aggregate": "mean", "field": "points" }
+      },
+      "config": {
+        "view": { "stroke": "transparent" }
+      }
+    };
+
+  	vegaEmbed("#vis", spec)
+      .then(result => console.log(result))
+      .catch(console.warn);
+  </script>
+</body>
